@@ -30,7 +30,12 @@ def iter_cell(nb, clue=None, cell_type='any'):
 def filter_between(str, before, after):
     if not str:
         return None
-
+    before = before or ''
+    after = after or ''
+    
+    if not before and not after:
+        return str 
+    
     pattern = re.escape(before) + '(.*?)' + re.escape(after)
     if ans := re.search(pattern, str, flags=re.S):
         return ans.group(1)
@@ -51,7 +56,7 @@ def filter_code(code, remove_comment=True, remove_indent=True):
     return '\n'.join(result)
 
 
-def search_nb(nb_path, cell_clue, before, after, remove_comment=True, remove_indent=True):
+def search_nb(nb_path, cell_clue, before=None, after=None, remove_comment=True, remove_indent=True):
     nb = read_nb(nb_path)
     result = []
     for cell in iter_cell(nb, cell_clue):
