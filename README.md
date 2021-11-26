@@ -1,4 +1,5 @@
 # nb-utils
+
 Utility functions for extracting parts of a code cell, and images in cell outputs from Jupyter Notebook (`ipynb`) files.
 
 ✅ Useful for auto grading Jupyter notebook submissions!
@@ -8,7 +9,7 @@ Utility functions for extracting parts of a code cell, and images in cell output
 `nbformat`
 
 ## Usage:
-```
+```python
 nb = read_nb('path/to/ipynb')
 
 # get an iterator over cell dictionaries:
