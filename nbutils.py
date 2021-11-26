@@ -56,7 +56,7 @@ def filter_code(code, remove_comment=True, remove_indent=True):
     return '\n'.join(result)
 
 
-def search_nb(nb_path, cell_clue, before=None, after=None, remove_comment=True, remove_indent=True):
+def search_nb(nb_path, cell_clue=None, before=None, after=None, remove_comment=True, remove_indent=True):
     nb = read_nb(nb_path)
     result = []
     for cell in iter_cell(nb, cell_clue):
