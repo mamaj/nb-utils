@@ -8,7 +8,8 @@ Utility functions for extracting parts of a code cell, and images in cell output
 
 `python 3.8+`  
 `numpy`  
-`nbformat`
+`nbformat`  
+`pillow`
 
 ## Usage
 
