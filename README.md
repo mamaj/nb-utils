@@ -4,11 +4,13 @@ Utility functions for extracting parts of a code cell, and images in cell output
 
 ✅ Useful for auto grading Jupyter notebook submissions!
 
-## Requirements:
+## Requirements
+
 `python 3.8+`  
 `nbformat`
 
-## Usage:
+## Usage
+
 ```python
 nb = read_nb('path/to/ipynb')
 
