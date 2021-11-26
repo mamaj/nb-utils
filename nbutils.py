@@ -1,10 +1,7 @@
-import re
-from base64 import b64decode
-from io import BytesIO
-
 import nbformat
-import numpy as np
-from PIL import Image
+
+import utils.image_utils as img_util
+import utils.text_utils as text_util
 
 
 def read_nb(file_path):
@@ -27,56 +24,17 @@ def iter_cell(nb, clue=None, cell_type='any'):
     )
 
 
-def filter_between(str, before, after):
-    if not str:
-        return None
-    before = before or ''
-    after = after or ''
-    
-    if not before and not after:
-        return str 
-    
-    pattern = re.escape(before) + '(.*?)' + re.escape(after)
-    if ans := re.search(pattern, str, flags=re.S):
-        return ans.group(1)
-
-
-def filter_code(code, remove_comment=True, remove_indent=True):
-    if not code:
-        return None
-
-    result = []
-    for line in code.split('\n'):
-        if remove_comment:
-            line = line.split('#')[0]
-        if remove_indent:
-            line = line.strip()
-        if line:
-            result.append(line)
-    return '\n'.join(result)
-
-
 def search_nb(nb_path, cell_clue=None, before=None, after=None, remove_comment=True, remove_indent=True):
     nb = read_nb(nb_path)
     result = []
     for cell in iter_cell(nb, cell_clue):
         code = cell['source']
-        code = filter_between(code, before, after)
-        code = filter_code(code, remove_comment=remove_comment,
-                           remove_indent=remove_indent)
+        code = text_util.filter_between(code, before, after)
+        code = text_util.filter_code(code, remove_comment=remove_comment,
+                                     remove_indent=remove_indent)
         if code:
             result.append(code)
     return result
-
-
-def b64_to_image(img_b64):
-    return Image.open(BytesIO(b64decode(img_b64)))
-
-
-def whiten_backgroud(image):
-    new_image = Image.new("RGBA", image.size, "WHITE")
-    new_image.paste(image, (0, 0), image)
-    return new_image.convert('RGB')
 
 
 def get_cell_b64images(cell):
@@ -89,26 +47,17 @@ def get_cell_b64images(cell):
     return images
 
 
-def vstack_imgs(images):
-    if not images:
-        return []
-    min_shape = sorted([(np.sum(i.size), i.size) for i in images])[0][1]
-    images_resized = [img.resize(min_shape) for img in images]
-    imgs_comb = np.vstack(images_resized)
-    return Image.fromarray(imgs_comb)
-
-
 def get_cell_images(cell, concat=False, remove_transparency=False):
     images = get_cell_b64images(cell)
     if not images:
         return None
 
-    images = [b64_to_image(img) for img in images]
+    images = [img_util.b64_to_image(img) for img in images]
 
     if remove_transparency:
-        images = [whiten_backgroud(img) for img in images]
+        images = [img_util.whiten_backgroud(img) for img in images]
 
     if concat:
-        images = vstack_imgs(images)
+        images = img_util.vstack_imgs(images)
 
     return images
