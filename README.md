@@ -21,7 +21,7 @@ iter_cell(nb, cell_type='code')
 
 # Alternatively, you may add a part of the code you are looking for in a cell:
 clue = 'parts of the code'
-iter_cell(nb, cell_type='code')
+iter_cell(nb, clue, cell_type='code')
 
 
 # or search in cells containing `cell_clue` return code between `before` and `after`:
