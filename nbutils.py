@@ -1,7 +1,7 @@
 import nbformat
 
-import utils.image_utils as img_util
-import utils.text_utils as text_util
+from .utils import image_utils
+from .utils import image_utils
 
 
 def read_nb(file_path):
@@ -29,8 +29,8 @@ def search_nb(nb_path, cell_clue=None, before=None, after=None, remove_comment=T
     result = []
     for cell in iter_cell(nb, cell_clue):
         code = cell['source']
-        code = text_util.filter_between(code, before, after)
-        code = text_util.filter_code(code, remove_comment=remove_comment,
+        code = image_utils.filter_between(code, before, after)
+        code = image_utils.filter_code(code, remove_comment=remove_comment,
                                      remove_indent=remove_indent)
         if code:
             result.append(code)
@@ -52,12 +52,12 @@ def get_cell_images(cell, concat=False, remove_transparency=False):
     if not images:
         return None
 
-    images = [img_util.b64_to_image(img) for img in images]
+    images = [image_utils.b64_to_image(img) for img in images]
 
     if remove_transparency:
-        images = [img_util.whiten_backgroud(img) for img in images]
+        images = [image_utils.whiten_backgroud(img) for img in images]
 
     if concat:
-        images = img_util.vstack_imgs(images)
+        images = image_utils.vstack_imgs(images)
 
     return images
